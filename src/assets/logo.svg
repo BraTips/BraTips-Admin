@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" role="img" aria-labelledby="title desc">
+  <title id="title">BraTips</title><desc id="desc">BraTips logo</desc>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff3b72"/><stop offset="1" stop-color="#d91652"/></linearGradient></defs>
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="#101a2e"/>
+  <path d="M20 42V19c0-4 3-7 7-7h10c7 0 12 4 12 10 0 4-2 7-5 9 5 1 8 4 8 9 0 7-6 12-14 12H20zm9-17h8c3 0 5-1 5-4s-2-4-5-4h-8v8zm0 13h9c4 0 6-2 6-5s-2-5-6-5h-9v10z" fill="url(#g)"/>
+  <text x="76" y="43" font-family="Inter,Arial,sans-serif" font-size="38" font-weight="800" fill="#101a2e">Bra</text>
+  <text x="143" y="43" font-family="Inter,Arial,sans-serif" font-size="38" font-weight="800" fill="#ed275f">Tips</text>
+</svg>

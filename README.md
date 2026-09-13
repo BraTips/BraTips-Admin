@@ -1,30 +1,23 @@
-# BraTips Admin Dashboard
+# BraTips Public / User Interface
 
-Vue 3 + TypeScript + Vuetify admin control center for BraTips.
+Public-facing Vue 3 + Vite application for BraTips.
 
-## API connection
+## Includes
+- Public browsing without authentication
+- Login and normal user registration
+- Tipster application / sign-up
+- Public latest predictions
+- Public tipster directory and profiles
+- Public Bet of the Day
+- Public prediction track record
+- Authenticated My Picks tracker with stake and potential return
+- Authenticated tipster dashboard and prediction submission
+- Uses the same BraTips logo as the admin app
 
-Set the backend URL in `.env`:
+## Run
+1. Copy `.env.example` to `.env` and set `VITE_API_URL`.
+2. Install dependencies with `npm install`.
+3. Run `npm run dev`.
+4. Build with `npm run build`.
 
-```env
-VITE_API_URL=http://localhost:5000/api/v1
-```
-
-Only the backend URL belongs here. **Do not put odds, football, xGoals or other provider secrets in this file.** Configure those in `bratips-backend/.env`.
-
-## Integrated modules
-
-- Dashboard and platform KPIs
-- Analytics with selectable 7/30/90/180/365-day ranges
-- Leagues, seasons, teams and matches CRUD
-- User role/status management
-- Tipster application approval workflow with sample prediction review
-- Approved tipster performance
-- Prediction moderation
-- Odds provider view
-- Live football provider view / data sync
-- Prediction trends
-- xGoals integration status
-- Provider configuration and health status
-
-The admin frontend no longer installs or runs the old fake backend interceptor; requests go to the real API.
+The My Picks feature records a user's selections and stake for tracking; it does not process deposits, withdrawals, bookmaker execution, or real-money settlement.
