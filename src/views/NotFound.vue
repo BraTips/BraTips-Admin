@@ -1,1 +1,0 @@
-<template><div class="wrap empty" style="min-height:55vh"><h1>Page not found</h1><RouterLink class="btn" to="/">Back home</RouterLink></div></template><script setup lang="ts">import {RouterLink} from 'vue-router';</script>

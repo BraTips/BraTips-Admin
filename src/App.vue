@@ -1,2 +1,7 @@
-<template><div class="app"><header class="top"><div class="wrap nav"><RouterLink to="/" class="brand"><img src="/logo.svg"/></RouterLink><nav><RouterLink to="/matches">Matches</RouterLink><RouterLink to="/picks">Latest Picks</RouterLink><RouterLink to="/bet-of-the-day">Bet of the Day</RouterLink><RouterLink to="/tipsters">Tipsters</RouterLink><RouterLink to="/history">Track Record</RouterLink></nav><div class="actions"><template v-if="auth.isLoggedIn"><RouterLink to="/dashboard" class="avatar">{{auth.user.name?.[0]}}</RouterLink><NotificationBell/><button class="ghost" @click="auth.logout">Log out</button></template><template v-else><RouterLink to="/login" class="ghost">Log in</RouterLink><RouterLink to="/signup" class="btn">Sign up</RouterLink></template></div></div></header><main><RouterView/></main><footer><div class="wrap foot"><div><img src="/logo.svg" class="foot-logo"/><p>Football predictions, tipsters and performance you can follow.</p></div><div><b>Explore</b><RouterLink to="/picks">Latest picks</RouterLink><RouterLink to="/bet-of-the-day">Bet of the Day</RouterLink><RouterLink to="/tipsters">Tipsters</RouterLink></div><div><b>For tipsters</b><RouterLink to="/tipster-signup">Become a tipster</RouterLink><RouterLink to="/login">Tipster login</RouterLink></div></div><div class="copyright">© {{new Date().getFullYear()}} BraTips. Predictions are for information only.</div></footer></div></template>
-<script setup lang="ts">import {RouterLink,RouterView} from 'vue-router';import {useAuth} from './stores/auth';import NotificationBell from './components/NotificationBell.vue';const auth=useAuth();</script>
+<template>
+  <RouterView></RouterView>
+</template>
+
+<script setup lang="ts">
+import { RouterView } from 'vue-router';
+</script>
