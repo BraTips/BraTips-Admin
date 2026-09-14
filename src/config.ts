@@ -9,7 +9,7 @@ const config: ConfigProps = {
   Sidebar_drawer: true,
   mini_sidebar: false,
   actTheme: 'light',
-  fontTheme: 'Public sans'
+  fontTheme: 'Inter'
 };
 
 export default config;
