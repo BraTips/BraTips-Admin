@@ -8,5 +8,5 @@
   <circle cx="36" cy="36" r="20" fill="url(#mark)"/>
   <path d="M36 20v32M20 36h32M25 25l22 22M47 25L25 47" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".9"/>
   <circle cx="36" cy="36" r="4" fill="#fff"/>
-  <text x="82" y="49" font-family="Inter,Arial,sans-serif" font-size="35" font-weight="800" letter-spacing="-1.6" fill="#ffffff">BraTipsters</text>
+  <text x="82" y="49" font-family="Inter,Arial,sans-serif" font-size="35" font-weight="800" letter-spacing="-1.6" fill="url(#word)">BraTipsters</text>
 </svg>

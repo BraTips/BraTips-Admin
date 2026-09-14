@@ -23,6 +23,7 @@ const MainRoutes = {
     { name: 'Analytics', path: '/analytics', component: () => import('@/views/analytics/AnalyticsPage.vue') },
     { name: 'Billing', path: '/billing', component: () => import('@/views/billing/BillingPage.vue') },
     { name: 'Settings', path: '/settings', component: () => import('@/views/settings/SettingsPage.vue') },
+    { name: 'Email Configuration', path: '/settings/email', component: () => import('@/views/settings/EmailConfigurationPage.vue') },
     { name: 'Profile', path: '/profile', component: () => import('@/views/profile/ProfilePage.vue') },
     { name: 'Social Profile', path: '/profile/social', component: () => import('@/views/profile/SocialProfilePage.vue') },
     { name: 'Account Settings', path: '/account-settings', component: () => import('@/views/profile/AccountSettingsPage.vue') },

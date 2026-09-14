@@ -34,7 +34,7 @@ export default defineConfig(({ command }) => {
         : null,
     ].filter(Boolean),
 
-    base: '/BraTipsters/',
+    base: '/',
 
     resolve: {
       alias: {

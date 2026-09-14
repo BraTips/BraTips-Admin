@@ -44,6 +44,7 @@ const sidebarItem: menu[] = [
   { title: 'Tipster Rewards', icon: TrophyOutlined, to: '/tipsters/rewards' },
   { title: 'Data Sync', icon: CloudSyncOutlined, to: '/sync' },
   { title: 'Billing', icon: SettingOutlined, to: '/billing' },
-  { title: 'Settings', icon: SettingOutlined, to: '/settings' }
+  { title: 'Settings', icon: SettingOutlined, to: '/settings' },
+  { title: 'Email Configuration', icon: SettingOutlined, to: '/settings/email' }
 ];
 export default sidebarItem;
