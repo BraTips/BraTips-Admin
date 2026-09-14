@@ -19,7 +19,7 @@ export interface menu {
 }
 
 const sidebarItem: menu[] = [
-  { header: 'BraTips' },
+  { header: 'BraTipsters' },
   { title: 'Dashboard', icon: DashboardOutlined, to: '/dashboard' },
   { title: 'Analytics', icon: BarChartOutlined, to: '/analytics' },
 

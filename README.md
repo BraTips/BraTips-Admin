@@ -1,6 +1,6 @@
-# BraTips Admin Dashboard
+# BraTipsters Admin Dashboard
 
-Vue 3 + TypeScript + Vuetify admin control center for BraTips.
+Vue 3 + TypeScript + Vuetify admin control center for BraTipsters.
 
 ## API connection
 

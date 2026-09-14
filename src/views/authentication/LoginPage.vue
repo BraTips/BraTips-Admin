@@ -17,7 +17,7 @@ import AuthLogin from './authForms/AuthLogin.vue';
           <div><strong>Expert Predictions</strong><small>Manage winning tips</small></div>
         </div>
       </div>
-      <div class="brand-footer">© {{ new Date().getFullYear() }} BraTips</div>
+      <div class="brand-footer">© {{ new Date().getFullYear() }} BraTipsters</div>
     </section>
 
     <section class="login-form-panel">
@@ -26,7 +26,7 @@ import AuthLogin from './authForms/AuthLogin.vue';
         <div class="login-heading">
           <span>ADMIN PORTAL</span>
           <h2>Welcome back</h2>
-          <p>Sign in to continue to your BraTips dashboard.</p>
+          <p>Sign in to continue to your BraTipsters dashboard.</p>
         </div>
         <AuthLogin />
         <div class="secure-note"><span class="secure-dot"></span> Secure administrator access</div>

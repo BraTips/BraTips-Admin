@@ -1,8 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" role="img" aria-labelledby="title desc">
-  <title id="title">BraTips</title><desc id="desc">BraTips logo</desc>
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff3b72"/><stop offset="1" stop-color="#d91652"/></linearGradient></defs>
-  <rect x="2" y="2" width="60" height="60" rx="17" fill="#101a2e"/>
-  <path d="M20 42V19c0-4 3-7 7-7h10c7 0 12 4 12 10 0 4-2 7-5 9 5 1 8 4 8 9 0 7-6 12-14 12H20zm9-17h8c3 0 5-1 5-4s-2-4-5-4h-8v8zm0 13h9c4 0 6-2 6-5s-2-5-6-5h-9v10z" fill="url(#g)"/>
-  <text x="76" y="43" font-family="Inter,Arial,sans-serif" font-size="38" font-weight="800" fill="#101a2e">Bra</text>
-  <text x="143" y="43" font-family="Inter,Arial,sans-serif" font-size="38" font-weight="800" fill="#ed275f">Tips</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 72" role="img" aria-labelledby="title desc">
+  <title id="title">BraTipsters</title><desc id="desc">BraTipsters football predictions and tipsters logo</desc>
+  <defs>
+    <linearGradient id="mark" x1="8" y1="8" x2="60" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#ff4f82"/><stop offset="1" stop-color="#d91652"/></linearGradient>
+    <linearGradient id="word" x1="75" y1="20" x2="320" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#101a2e"/><stop offset="1" stop-color="#25395d"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="68" height="68" rx="20" fill="#101a2e"/>
+  <circle cx="36" cy="36" r="20" fill="url(#mark)"/>
+  <path d="M36 20v32M20 36h32M25 25l22 22M47 25L25 47" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".9"/>
+  <circle cx="36" cy="36" r="4" fill="#fff"/>
+  <text x="82" y="49" font-family="Inter,Arial,sans-serif" font-size="35" font-weight="800" letter-spacing="-1.6" fill="#ffffff">BraTipsters</text>
 </svg>

@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/BraTips/assets/:path*",
+      "source": "/BraTipsters/assets/:path*",
       "destination": "/assets/:path*"
     },
     {
-      "source": "/BraTips/:path*",
+      "source": "/BraTipsters/:path*",
       "destination": "/index.html"
     }
   ]

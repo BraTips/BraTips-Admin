@@ -2,9 +2,9 @@
 
 Please continue reading below to explore the features of the Pro version:
 
-# BraTips Admin Panel - Unlock Premium Features with the Pro Version
+# BraTipsters Admin Panel - Unlock Premium Features with the Pro Version
 
-Elevate your project with the Pro Version of the <b>BraTips Admin Panel!</b> Built to cater to modern web applications, the Pro version is loaded with advanced features, intuitive design elements, and dynamic tools that ensure seamless functionality.
+Elevate your project with the Pro Version of the <b>BraTipsters Admin Panel!</b> Built to cater to modern web applications, the Pro version is loaded with advanced features, intuitive design elements, and dynamic tools that ensure seamless functionality.
 
 This page (folder) is a sneak peek into the premium features available in <b>version 1.2.0</b>. Upgrade to the Pro version to unlock exclusive pages and components that will take your project to the next level.
 
