@@ -1,179 +1,50 @@
-/*This is for the logo*/
+/* BraTipsters admin sidebar: navy shell with pink brand accent */
 .leftSidebar {
-  border: 0px;
-  box-shadow: none !important;
-  border-right: 1px solid rgba(var(--v-theme-borderLight), 0.8);
-  .logo {
-    padding-left: 7px;
-  }
-
-  /* logo image sizing to avoid distortion and keep it contained */
-  .logo img.app-logo {
-    height: 36px;
-    width: auto;
-    display: block;
-    object-fit: contain;
-  }
-}
-/*This is for the Vertical sidebar*/
-.scrollnavbar {
-  height: calc(100vh - 110px);
-  .smallCap {
-    padding: 0px 0 0 20px !important;
-  }
-  .v-list {
-    color: rgb(var(--v-theme-lightText));
-    padding: 0;
-    .v-list-item--one-line {
-      &.v-list-item--active {
-        border-right: 2px solid rgb(var(--v-theme-primary));
-      }
-    }
-    .v-list-group {
-      .v-list-item--one-line {
-        &.v-list-item--active.v-list-item--link {
-          border-right: 2px solid rgb(var(--v-theme-primary));
-        }
-        &.v-list-item--active.v-list-group__header {
-          border-right: none;
-          background: transparent;
-        }
-      }
-      .v-list-group__items {
-        .v-list-item--link,
-        .v-list-item {
-          .v-list-item__prepend {
-            margin-inline-end: 1px;
-          }
-        }
-      }
-    }
-    .v-list-item--variant-plain,
-    .v-list-item--variant-outlined,
-    .v-list-item--variant-text,
-    .v-list-item--variant-tonal {
-      color: rgb(var(--v-theme-darkText));
-    }
-  }
-  /*General Menu css*/
-  .v-list-group__items .v-list-item,
-  .v-list-item {
-    border-radius: 0;
-    padding-inline-start: calc(20px + var(--indent-padding) / 2) !important;
-    .v-list-item__prepend {
-      margin-inline-end: 13px;
-    }
-    .v-list-item__append {
-      font-size: 0.875rem;
-      .v-icon {
-        margin-inline-start: 13px;
-      }
-      > .v-icon {
-        --v-medium-emphasis-opacity: 0.8;
-      }
-    }
-    .v-list-item-title {
-      font-size: 0.875rem;
-      color: rgb(var(--v-theme-darkText));
-    }
-    &.v-list-item--active {
-      .v-list-item-title {
-        color: rgb(var(--v-theme-primary));
-      }
-    }
-  }
-  /*This is for the dropdown*/
-  .v-list {
-    .v-list-item--active {
-      .v-list-item-title {
-        font-weight: 500;
-      }
-    }
-    .sidebarchip .v-icon {
-      margin-inline-start: -3px;
-    }
-    .v-list-group {
-      .v-list-item:focus-visible > .v-list-item__overlay {
-        opacity: 0;
-      }
-    }
-    > .v-list-group {
-      position: relative;
-      > .v-list-item--active,
-      > .v-list-item:hover {
-        background: rgb(var(--v-theme-primary), 0.05);
-      }
-    }
-  }
-}
-.v-navigation-drawer--rail {
-  .scrollnavbar .v-list .v-list-group__items,
-  .hide-menu {
-    opacity: 0;
-  }
+  --brat-navy: #101a2e;
+  --brat-navy-2: #172541;
+  --brat-pink: #ed275f;
+  background: var(--brat-navy) !important;
+  color: rgba(255,255,255,.82);
+  border: 0 !important;
+  box-shadow: 8px 0 28px rgba(16,26,46,.10) !important;
+  .v-navigation-drawer__content { background: var(--brat-navy); }
+  .logo { padding-left: 7px; }
+  .logo { display: flex; align-items: center; min-height: 40px; overflow: hidden; }
+  .logo a { display: block; line-height: 0; }
+  .logo img.app-logo { height: 36px; width: 180px; max-width: none; display: block; object-fit: contain; object-position: left center; }
   .scrollnavbar {
-    .v-list-item {
-      .v-list-item__prepend {
-        margin-left: 8px;
-        .anticon {
-          svg {
-            width: 20px;
-            height: 20px;
-          }
+    .v-list { color: rgba(255,255,255,.72); background: transparent;
+      .v-list-subheader, .smallCap { color: rgba(255,255,255,.42) !important; }
+      .v-divider { border-color: rgba(255,255,255,.08) !important; }
+      .v-list-item {
+        margin: 2px 10px; border-radius: 9px !important;
+        color: rgba(255,255,255,.76) !important;
+        .v-list-item-title { color: inherit !important; font-weight: 500; }
+        .v-list-item__prepend .anticon { color: rgba(255,255,255,.58); }
+        &:hover { background: rgba(255,255,255,.07) !important; color: #fff !important; }
+        &.v-list-item--active {
+          background: rgba(237,39,95,.16) !important;
+          color: #fff !important;
+          box-shadow: inset 3px 0 0 var(--brat-pink);
+          .v-list-item__prepend .anticon, .v-list-item-title { color: #fff !important; }
         }
       }
-    }
-    .v-list-group__items .v-list-item,
-    .v-list-item {
-      padding-inline-start: calc(12px + var(--indent-padding) / 2) !important;
-    }
-    .ExtraBox {
-      display: none;
+      > .v-list-group > .v-list-item--active, > .v-list-group > .v-list-item:hover { background: rgba(255,255,255,.07) !important; }
+      .v-list-group__items .v-list-item { margin-left: 22px; }
     }
   }
-  .sidebar-user {
-    margin-left: -6px;
-  }
-  .leftPadding {
-    margin-left: 0px;
-  }
-  &.leftSidebar {
-    .v-list-subheader {
-      display: none;
-    }
-    .v-navigation-drawer__content {
-      .pa-5 {
-        padding-left: 10px !important;
-        .logo {
-          padding-left: 0;
-        }
-      }
-    }
-  }
+}
+.v-navigation-drawer--rail.leftSidebar {
+  .scrollnavbar .v-list-item { margin-left: 6px; margin-right: 6px; }
+  .v-navigation-drawer__content .pa-5 { padding-left: 10px !important; padding-right: 10px !important; }
+  .logo img.app-logo { width: 36px; object-fit: cover; object-position: left center; }
 }
 @media only screen and (min-width: 1170px) {
-  .mini-sidebar {
-    .logo {
-      width: 40px;
-      overflow: hidden;
-    }
-    .leftSidebar:hover {
-      box-shadow: $box-shadow !important;
-    }
-    .v-navigation-drawer--expand-on-hover:hover {
-      .logo {
-        width: 100%;
-      }
-      .v-list .v-list-group__items,
-      .hide-menu {
-        opacity: 1;
-      }
-    }
-  }
+  .mini-sidebar .leftSidebar:hover { box-shadow: 10px 0 32px rgba(16,26,46,.18) !important; }
 }
-/* Adjust logo size when sidebar is collapsed (rail / mini) */
-.mini-sidebar .logo img.app-logo,
-.v-navigation-drawer--rail .logo img.app-logo {
-  height: 28px;
-  max-width: 100%;
+.profileBtn {
+  height: 44px !important; margin: 0 20px 0 10px !important; padding: 0 6px;
+  .v-avatar { width: 32px; height: 32px; img { width: 32px; height: 32px; } }
 }
+@media (max-width: 600px) { .profileBtn { min-width: 42px; margin: 0 12px 0 0 !important; .v-avatar { width: 24px; height: 24px; img { width: 24px; height: 24px; } } } }
+@media (max-width: 460px) { .notification-dropdown { width: 332px !important; .v-list-item__content .d-inline-flex .text-caption { min-width: 50px; } } }

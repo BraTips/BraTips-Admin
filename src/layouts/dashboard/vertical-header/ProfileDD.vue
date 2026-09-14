@@ -6,7 +6,6 @@ import {
   UserOutlined,
   SettingOutlined,
   QuestionCircleOutlined,
-  LockOutlined,
   CommentOutlined,
   UnorderedListOutlined,
   EditOutlined,
@@ -46,7 +45,7 @@ const authStore = useAuthStore();
       <v-window v-model="tab">
         <v-window-item value="111">
           <v-list class="py-0" aria-label="profile list" aria-busy="true">
-            <v-list-item color="primary" rounded="0" value="Edit profile">
+            <v-list-item to="/profile" color="primary" rounded="0" value="Edit profile">
               <template v-slot:prepend>
                 <EditOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -54,7 +53,7 @@ const authStore = useAuthStore();
               <v-list-item-title class="text-h6"> Edit Profile</v-list-item-title>
             </v-list-item>
 
-            <v-list-item color="primary" rounded="0" value="View Profile">
+            <v-list-item to="/profile" color="primary" rounded="0" value="View Profile">
               <template v-slot:prepend>
                 <UserOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -62,7 +61,7 @@ const authStore = useAuthStore();
               <v-list-item-title class="text-h6"> View Profile</v-list-item-title>
             </v-list-item>
 
-            <v-list-item color="primary" rounded="0" value="Social Profile">
+            <v-list-item to="/profile/social" color="primary" rounded="0" value="Social Profile">
               <template v-slot:prepend>
                 <ProfileOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -70,7 +69,7 @@ const authStore = useAuthStore();
               <v-list-item-title class="text-h6"> Social Profile</v-list-item-title>
             </v-list-item>
 
-            <v-list-item color="primary" rounded="0" value="Billing">
+            <v-list-item to="/billing" color="primary" rounded="0" value="Billing">
               <template v-slot:prepend>
                 <WalletOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -89,7 +88,7 @@ const authStore = useAuthStore();
         </v-window-item>
         <v-window-item value="222">
           <v-list class="py-0" aria-label="profile list" aria-busy="true">
-            <v-list-item color="primary" rounded="0" value="Support">
+            <v-list-item to="/support" color="primary" rounded="0" value="Support">
               <template v-slot:prepend>
                 <QuestionCircleOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -97,7 +96,7 @@ const authStore = useAuthStore();
               <v-list-item-title class="text-h6"> Support</v-list-item-title>
             </v-list-item>
 
-            <v-list-item color="primary" rounded="0" value="Account">
+            <v-list-item to="/account-settings" color="primary" rounded="0" value="Account">
               <template v-slot:prepend>
                 <UserOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -107,7 +106,7 @@ const authStore = useAuthStore();
 
             
 
-            <v-list-item color="primary" rounded="0" value="Feedback">
+            <v-list-item to="/feedback" color="primary" rounded="0" value="Feedback">
               <template v-slot:prepend>
                 <CommentOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
@@ -115,7 +114,7 @@ const authStore = useAuthStore();
               <v-list-item-title class="text-h6"> Feedback</v-list-item-title>
             </v-list-item>
 
-            <v-list-item color="primary" rounded="0" value="History">
+            <v-list-item to="/activity-history" color="primary" rounded="0" value="History">
               <template v-slot:prepend>
                 <UnorderedListOutlined :style="{ fontSize: '14px' }" class="mr-4" />
               </template>
