@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { apiFetch } from '@/utils/api'
 import { DashboardOutlined, UserOutlined, TrophyOutlined, FundOutlined, ThunderboltOutlined, SyncOutlined, CreditCardOutlined, FileSearchOutlined } from '@ant-design/icons-vue'
+import { mdiRefresh, mdiSync } from '@mdi/js'
 
 const loading = ref(true)
 const refreshing = ref(false)
@@ -61,8 +62,8 @@ const priorities = computed(() => [
         <p>Monitor predictions, football data, tipsters and subscriptions from one place.</p>
       </div>
       <div class="hero-actions">
-        <v-btn variant="text" to="/sync" prepend-icon="mdi-sync">Data sync</v-btn>
-        <v-btn class="refresh-btn" :loading="refreshing" prepend-icon="mdi-refresh" @click="load">Refresh</v-btn>
+        <v-btn variant="text" to="/sync" :prepend-icon="mdiSync">Data sync</v-btn>
+        <v-btn class="refresh-btn" :loading="refreshing" :prepend-icon="mdiRefresh" @click="load">Refresh</v-btn>
       </div>
     </section>
 
