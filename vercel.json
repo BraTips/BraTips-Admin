@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/BraTips/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/BraTips/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}
