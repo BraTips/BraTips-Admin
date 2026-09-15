@@ -16,9 +16,21 @@ async function runRange(){
   try{
     if(!startDate.value||!endDate.value) throw new Error('Select both a start date and an end date.');
     if(endDate.value<startDate.value) throw new Error('End date must be on or after start date.');
-    const d=await apiFetch('/admin/sync/run-range',{method:'POST',body:JSON.stringify({startDate:startDate.value,endDate:endDate.value})},120000);
-    message.value=`Custom range sync completed: ${d.job?.fetched||0} fixtures fetched, ${d.job?.upserted||0} saved. Predictions generated for the selected range.`;
-    await load();
+    const d=await apiFetch('/admin/sync/run-range',{method:'POST',body:JSON.stringify({startDate:startDate.value,endDate:endDate.value})},30000);
+    const jobId=d.job?._id;
+    if(!jobId) throw new Error('The backend accepted the sync but did not return a job ID.');
+    message.value='Custom range sync started. Keeping the job status updated…';
+    for(let i=0;i<120;i++){
+      await new Promise(resolve=>window.setTimeout(resolve,3000));
+      const job=await apiFetch(`/admin/sync/status/${jobId}`,{},15000);
+      if(job.status==='success'){
+        message.value=`Custom range sync completed: ${job.fetched||0} fixtures fetched, ${job.upserted||0} saved. Predictions generated for the selected range.`;
+        await load();
+        return;
+      }
+      if(job.status==='failed') throw new Error(job.error||'Custom range sync failed.');
+    }
+    throw new Error('Custom range sync is still running. Check Sync History shortly for the final result.');
   }catch(e:any){error.value=e.message}finally{loading.value=false}
 }
 onMounted(load)
