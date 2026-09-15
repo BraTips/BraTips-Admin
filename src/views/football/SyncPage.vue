@@ -10,13 +10,13 @@ const endDate=ref(new Date(Date.now()+6*86400000).toISOString().slice(0,10));
 async function load(){try{status.value=await apiFetch('/admin/sync/status')}catch(e:any){error.value=e.message}}
 async function run(type:'live'|'daily'){loading.value=true;error.value='';message.value='';try{const d=await apiFetch('/admin/sync/run',{method:'POST',body:JSON.stringify({type,date:date.value})});message.value=`${type==='live'?'Live':'Daily'} sync completed: ${d.fetched} fetched, ${d.upserted} saved.`;await load()}catch(e:any){error.value=e.message}finally{loading.value=false}}
 async function runDaily(){loading.value=true;error.value='';message.value='';try{const d=await apiFetch('/admin/sync/run-daily',{method:'POST',body:JSON.stringify({date:date.value})});message.value=`Daily sync completed and Bet of the Day generated (${d.picks?.length||0} picks).`;await load()}catch(e:any){error.value=e.message}finally{loading.value=false}}
-async function runWeekly(){loading.value=true;error.value='';message.value='';try{const d=await apiFetch('/admin/sync/run-weekly',{method:'POST',body:JSON.stringify({date:date.value})});message.value=`Full week sync completed: ${d.job?.fetched||0} fixtures fetched, ${d.job?.upserted||0} saved. Weekly predictions were generated.`;await load()}catch(e:any){error.value=e.message}finally{loading.value=false}}
+async function runWeekly(){loading.value=true;error.value='';message.value='';try{const d=await apiFetch('/admin/sync/run-weekly',{method:'POST',body:JSON.stringify({date:date.value})},120000);message.value=`Full week sync completed: ${d.job?.fetched||0} fixtures fetched, ${d.job?.upserted||0} saved. Weekly predictions were generated.`;await load()}catch(e:any){error.value=e.message}finally{loading.value=false}}
 async function runRange(){
   loading.value=true;error.value='';message.value='';
   try{
     if(!startDate.value||!endDate.value) throw new Error('Select both a start date and an end date.');
     if(endDate.value<startDate.value) throw new Error('End date must be on or after start date.');
-    const d=await apiFetch('/admin/sync/run-range',{method:'POST',body:JSON.stringify({startDate:startDate.value,endDate:endDate.value})});
+    const d=await apiFetch('/admin/sync/run-range',{method:'POST',body:JSON.stringify({startDate:startDate.value,endDate:endDate.value})},120000);
     message.value=`Custom range sync completed: ${d.job?.fetched||0} fixtures fetched, ${d.job?.upserted||0} saved. Predictions generated for the selected range.`;
     await load();
   }catch(e:any){error.value=e.message}finally{loading.value=false}

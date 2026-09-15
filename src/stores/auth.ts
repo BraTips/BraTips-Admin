@@ -32,6 +32,21 @@ export const useAuthStore = defineStore({
       localStorage.setItem('accessToken', this.accessToken);
       await router.push(this.returnUrl || '/dashboard');
     },
+    async refresh() {
+      const res = await fetch(`${apiUrl}/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || data.error || 'Session expired. Please sign in again.');
+      const payload = data.data || data;
+      if (payload.user?.role !== 'admin' || !payload.accessToken) throw new Error('Administrator session could not be refreshed. Please sign in again.');
+      this.user = payload.user;
+      this.accessToken = payload.accessToken;
+      localStorage.setItem('adminUser', JSON.stringify(this.user));
+      localStorage.setItem('accessToken', this.accessToken);
+      return this.user;
+    },
     async me() {
       if (!this.accessToken) return null;
       const res = await fetch(`${apiUrl}/auth/me`, {
