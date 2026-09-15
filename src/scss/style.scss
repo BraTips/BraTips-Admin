@@ -22,3 +22,13 @@
 @import './page/dashboards';
 
 @import 'vue3-perfect-scrollbar/style.css';
+
+
+/* BraTipsters admin readability pass */
+body, .v-application { font-size: 15px; }
+.v-card-title { font-size: 18px !important; font-weight: 800 !important; }
+.v-card-subtitle { font-size: 13px !important; }
+.v-list-item-title { font-size: 14px !important; font-weight: 650 !important; }
+.v-btn { font-size: 14px !important; font-weight: 700 !important; }
+.v-table, .v-data-table, .v-field, .v-label { font-size: 14px; }
+h1,h2,h3,h4,h5,h6,.text-h1,.text-h2,.text-h3,.text-h4,.text-h5,.text-h6 { font-weight: 800; }
