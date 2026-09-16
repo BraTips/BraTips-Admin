@@ -1,5 +1,58 @@
 <script setup lang="ts">
-import { ref,onMounted } from 'vue'; import {apiFetch} from '@/utils/api';
-const rows=ref<any[]>([]),loading=ref(false),error=ref('');async function load(){loading.value=true;try{const d=await apiFetch('/admin/tipsters');rows.value=d.data||d||[]}catch(e:any){error.value=e.message}finally{loading.value=false}}onMounted(load)
+import { ref, onMounted } from 'vue';
+import { apiFetch } from '@/utils/api';
+import DataTable from '@/components/shared/DataTable.vue';
+import StatusChip from '@/components/shared/StatusChip.vue';
+
+const rows = ref<any[]>([]);
+const loading = ref(false);
+const error = ref('');
+const search = ref('');
+
+const headers = [
+  { title: 'Tipster', key: 'username' },
+  { title: 'Tips', key: 'totalTips', align: 'end' as const },
+  { title: 'Wins', key: 'wins', align: 'end' as const },
+  { title: 'Losses', key: 'losses', align: 'end' as const },
+  { title: 'Profit', key: 'profit', align: 'end' as const },
+  { title: 'ROI', key: 'roi', align: 'end' as const },
+  { title: 'Status', key: 'active' }
+];
+
+async function load() {
+  loading.value = true;
+  try {
+    const d = await apiFetch('/admin/tipsters');
+    rows.value = d.data || d || [];
+  } catch (e: any) {
+    error.value = e.message;
+  } finally {
+    loading.value = false;
+  }
+}
+onMounted(load);
 </script>
-<template><v-card elevation="0" class="border rounded-lg"><v-card-item><v-card-title>Approved Tipsters</v-card-title><v-card-subtitle>Manage approved BraTipsters tipster profiles and performance.</v-card-subtitle></v-card-item><v-card-text><v-alert v-if="error" type="error" variant="tonal">{{error}}</v-alert><v-progress-linear v-if="loading" indeterminate/><v-table v-else><thead><tr><th>Tipster</th><th>Tips</th><th>Wins</th><th>Losses</th><th>Profit</th><th>ROI</th><th>Status</th></tr></thead><tbody><tr v-for="r in rows" :key="r._id"><td><b>{{r.username}}</b><div class="text-caption">{{r.userId?.email}}</div></td><td>{{r.totalTips}}</td><td>{{r.wins}}</td><td>{{r.losses}}</td><td>{{r.profit}}</td><td>{{r.roi}}%</td><td><v-chip size="small" :color="r.active?'success':'error'">{{r.active?'Active':'Suspended'}}</v-chip></td></tr><tr v-if="!rows.length"><td colspan="7" class="text-center py-8">No approved tipsters yet.</td></tr></tbody></v-table></v-card-text></v-card></template>
+
+<template>
+  <DataTable
+    title="Approved Tipsters"
+    subtitle="Manage approved BraTipsters tipster profiles and performance."
+    :headers="headers"
+    :items="rows"
+    :loading="loading"
+    :error="error"
+    v-model:search="search"
+    search-label="Search tipsters"
+    empty-title="No approved tipsters yet"
+    empty-text="Approved applications will appear here."
+  >
+    <template #item.username="{ item }">
+      <div class="font-weight-bold">{{ item.username }}</div>
+      <div class="text-caption text-medium-emphasis">{{ item.userId?.email }}</div>
+    </template>
+    <template #item.roi="{ item }">{{ item.roi }}%</template>
+    <template #item.active="{ item }">
+      <StatusChip :status="item.active" />
+    </template>
+  </DataTable>
+</template>

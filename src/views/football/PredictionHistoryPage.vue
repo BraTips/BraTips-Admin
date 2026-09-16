@@ -1,7 +1,83 @@
 <script setup lang="ts">
-import { ref,onMounted } from 'vue'; import { apiFetch } from '@/utils/api';
-const data=ref<any[]>([]),stats=ref<any>({}),loading=ref(false),error=ref(''),status=ref('');
-async function load(){loading.value=true;try{const q=status.value?`?status=${status.value}`:'';const d=await apiFetch(`/admin/prediction-history${q}`);data.value=d.data;stats.value=d.stats}catch(e:any){error.value=e.message}finally{loading.value=false}}
-onMounted(load)
+import { ref, onMounted } from 'vue';
+import { apiFetch } from '@/utils/api';
+import DataTable from '@/components/shared/DataTable.vue';
+import StatusChip from '@/components/shared/StatusChip.vue';
+import StatCard from '@/components/shared/StatCard.vue';
+
+const data = ref<any[]>([]);
+const stats = ref<any>({});
+const loading = ref(false);
+const error = ref('');
+const status = ref('');
+const search = ref('');
+
+const headers = [
+  { title: 'Date', key: 'date' },
+  { title: 'Tipster', key: 'tipster' },
+  { title: 'Fixture', key: 'fixture' },
+  { title: 'Prediction', key: 'prediction' },
+  { title: 'Odds', key: 'odds', align: 'end' as const },
+  { title: 'Confidence', key: 'confidence', align: 'end' as const },
+  { title: 'Result', key: 'status' },
+  { title: 'P/L', key: 'profit', align: 'end' as const }
+];
+const statCards = [
+  { k: 'total', l: 'Settled Tips' },
+  { k: 'wins', l: 'Wins' },
+  { k: 'losses', l: 'Losses' },
+  { k: 'winRate', l: 'Win Rate %' },
+  { k: 'profit', l: 'Profit / Loss' }
+];
+
+async function load() {
+  loading.value = true;
+  try {
+    const q = status.value ? `?status=${status.value}` : '';
+    const d = await apiFetch(`/admin/prediction-history${q}`);
+    data.value = d.data;
+    stats.value = d.stats;
+  } catch (e: any) { error.value = e.message; }
+  finally { loading.value = false; }
+}
+onMounted(load);
 </script>
-<template><v-row><v-col cols="12"><v-card elevation="0" class="border rounded-lg"><v-card-item><template #prepend><div><v-card-title>Prediction History</v-card-title><v-card-subtitle>Historical BraTipsters track record and settled results.</v-card-subtitle></div></template><template #append><v-select v-model="status" :items="['','won','lost','void']" label="Result" density="compact" variant="outlined" hide-details style="width:150px" @update:model-value="load"/></template></v-card-item><v-card-text><v-row><v-col v-for="item in [{k:'total',l:'Settled Tips'},{k:'wins',l:'Wins'},{k:'losses',l:'Losses'},{k:'winRate',l:'Win Rate %'},{k:'profit',l:'Profit / Loss'}]" :key="item.k" cols="6" md="2"><div class="text-caption">{{item.l}}</div><div class="text-h5">{{stats[item.k]??0}}</div></v-col></v-row></v-card-text></v-card></v-col><v-col cols="12"><v-card elevation="0" class="border rounded-lg"><v-card-text><v-alert v-if="error" type="error" variant="tonal">{{error}}</v-alert><v-progress-linear v-if="loading" indeterminate/><v-table v-else><thead><tr><th>Date</th><th>Tipster</th><th>Fixture</th><th>Prediction</th><th>Odds</th><th>Confidence</th><th>Result</th><th>P/L</th></tr></thead><tbody><tr v-for="p in data" :key="p._id"><td>{{p.resultAt?new Date(p.resultAt).toLocaleDateString():new Date(p.createdAt).toLocaleDateString()}}</td><td>{{p.tipsterId?.name||p.tipsterId?.email}}</td><td>{{p.fixture}}</td><td>{{p.prediction}}</td><td>{{p.odds}}</td><td>{{p.confidence??'—'}}%</td><td><v-chip size="small" :color="p.status==='won'?'success':p.status==='lost'?'error':'warning'">{{p.status}}</v-chip></td><td>{{p.profit??0}}</td></tr></tbody></v-table></v-card-text></v-card></v-col></v-row></template>
+
+<template>
+  <v-row class="mb-1">
+    <v-col v-for="s in statCards" :key="s.k" cols="6" md="2" lg="2">
+      <StatCard :label="s.l" :value="stats[s.k] ?? 0" />
+    </v-col>
+  </v-row>
+
+  <DataTable
+    title="Prediction History"
+    subtitle="Historical BraTipsters track record and settled results."
+    :headers="headers"
+    :items="data"
+    :loading="loading"
+    :error="error"
+    v-model:search="search"
+    search-label="Search history"
+    empty-title="No settled predictions yet"
+  >
+    <template #filters>
+      <v-select
+        v-model="status"
+        :items="['', 'won', 'lost', 'void']"
+        label="Result"
+        density="compact"
+        variant="outlined"
+        hide-details
+        style="min-width: 150px"
+        @update:model-value="load"
+      />
+    </template>
+
+    <template #item.date="{ item }">{{ item.resultAt ? new Date(item.resultAt).toLocaleDateString() : new Date(item.createdAt).toLocaleDateString() }}</template>
+    <template #item.tipster="{ item }">{{ item.tipsterId?.name || item.tipsterId?.email }}</template>
+    <template #item.confidence="{ item }">{{ item.confidence ?? '—' }}%</template>
+    <template #item.status="{ item }"><StatusChip :status="item.status" /></template>
+    <template #item.profit="{ item }">{{ item.profit ?? 0 }}</template>
+  </DataTable>
+</template>

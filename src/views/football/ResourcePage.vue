@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { apiFetch } from '@/utils/api';
+import DataTable from '@/components/shared/DataTable.vue';
+import StatusChip from '@/components/shared/StatusChip.vue';
 
 interface SelectOption { value: string; title: string; }
 interface Field {
@@ -137,40 +139,60 @@ async function quickUpdate(row: any, patch: Record<string, any>) {
 }
 defineExpose({ load, quickUpdate });
 onMounted(async () => { await loadFieldOptions(); await load(); });
+
+const tableHeaders = computed(() => [
+  ...props.fields.map(f => ({ title: f.label, key: f.key, sortable: false })),
+  { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
+]);
 </script>
 
 <template>
-  <v-card elevation="0" class="border rounded-lg">
-    <v-card-item>
-      <template #prepend><div><v-card-title>{{ title }}</v-card-title><v-card-subtitle>Manage {{ title.toLowerCase() }} in MongoDB.</v-card-subtitle></div></template>
-      <template #append><v-btn color="primary" prepend-icon="mdi-plus" @click="openCreate">Add New</v-btn></template>
-    </v-card-item>
-    <v-card-text>
-      <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" variant="outlined" clearable class="mb-4" />
-      <div v-if="statusChoices.length" class="mb-4" style="display:flex;gap:8px;flex-wrap:wrap">
-        <v-chip :color="!statusFilter?'primary':undefined" :variant="!statusFilter?'flat':'outlined'" size="small" @click="statusFilter=''">All ({{ rows.length }})</v-chip>
-        <v-chip v-for="c in statusChoices" :key="c" :color="statusFilter===c?'primary':undefined" :variant="statusFilter===c?'flat':'outlined'" size="small" @click="statusFilter=c">
-          {{ c }} ({{ rows.filter(r => (r[statusKey!] ?? '') === c).length }})
-        </v-chip>
+  <DataTable
+    :headers="tableHeaders"
+    :items="filtered"
+    :loading="loading"
+    :error="error"
+    v-model:search="search"
+    external-filter
+    :title="title"
+    :subtitle="`Manage ${title.toLowerCase()} in MongoDB.`"
+    empty-title="No records found"
+    empty-text="Create a new record or adjust your search and filters."
+  >
+    <template #actions>
+      <v-btn color="primary" prepend-icon="$plus" @click="openCreate">Add New</v-btn>
+    </template>
+
+    <template v-if="statusChoices.length" #filters>
+      <v-chip :color="!statusFilter ? 'primary' : undefined" :variant="!statusFilter ? 'flat' : 'outlined'" size="small" @click="statusFilter = ''">
+        All ({{ rows.length }})
+      </v-chip>
+      <v-chip
+        v-for="c in statusChoices"
+        :key="c"
+        :color="statusFilter === c ? 'primary' : undefined"
+        :variant="statusFilter === c ? 'flat' : 'outlined'"
+        size="small"
+        @click="statusFilter = c"
+      >
+        {{ c }} ({{ rows.filter(r => (r[statusKey!] ?? '') === c).length }})
+      </v-chip>
+    </template>
+
+    <template v-for="f in fields" :key="f.key" #[`item.${f.key}`]="{ item }">
+      <StatusChip v-if="f.type === 'boolean'" :status="item[f.key]" />
+      <StatusChip v-else-if="f.key === statusKey" :status="displayValue(item, f)" />
+      <span v-else>{{ displayValue(item, f) }}</span>
+    </template>
+
+    <template #item.actions="{ item }">
+      <div class="d-flex justify-end ga-1 text-no-wrap">
+        <slot name="row-actions" :row="item" :quick-update="quickUpdate" />
+        <v-btn size="small" variant="text" color="primary" @click="openEdit(item)">Edit</v-btn>
+        <v-btn size="small" variant="text" color="error" @click="remove(item)">Delete</v-btn>
       </div>
-      <v-alert v-if="error" type="error" variant="tonal" class="mb-4">{{ error }}</v-alert>
-      <v-progress-linear v-if="loading" indeterminate />
-      <v-table v-else>
-        <thead><tr><th v-for="f in fields" :key="f.key">{{ f.label }}</th><th class="text-right">Actions</th></tr></thead>
-        <tbody>
-          <tr v-for="row in filtered" :key="row._id">
-            <td v-for="f in fields" :key="f.key">{{ displayValue(row, f) }}</td>
-            <td class="text-right text-no-wrap">
-              <slot name="row-actions" :row="row" :quick-update="quickUpdate" />
-              <v-btn size="small" variant="text" color="primary" @click="openEdit(row)">Edit</v-btn>
-              <v-btn size="small" variant="text" color="error" @click="remove(row)">Delete</v-btn>
-            </td>
-          </tr>
-          <tr v-if="!filtered.length"><td :colspan="fields.length + 1" class="text-center py-8">No records found.</td></tr>
-        </tbody>
-      </v-table>
-    </v-card-text>
-  </v-card>
+    </template>
+  </DataTable>
 
   <v-dialog v-model="dialog" max-width="650">
     <v-card>

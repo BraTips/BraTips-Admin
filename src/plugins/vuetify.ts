@@ -1,5 +1,6 @@
 import { type ThemeDefinition, createVuetify } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
+import { mdiMagnify } from '@mdi/js';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
@@ -51,7 +52,8 @@ export default createVuetify({
   icons: {
     defaultSet: 'mdi',
     aliases: {
-      ...aliases
+      ...aliases,
+      magnify: mdiMagnify
     },
     sets: {
       mdi

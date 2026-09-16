@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { apiFetch } from '@/utils/api';
+import DataTable from '@/components/shared/DataTable.vue';
+import StatusChip from '@/components/shared/StatusChip.vue';
 
 const loading=ref(false), error=ref(''), message=ref(''), status=ref<any>(null);
 const date=ref(new Date().toISOString().slice(0,10));
@@ -100,15 +102,27 @@ onMounted(load)
   </v-col>
 
   <v-col cols="12">
-    <v-card elevation="0" class="border rounded-lg">
-      <v-card-item><v-card-title>Sync History</v-card-title></v-card-item>
-      <v-card-text>
-        <v-table>
-          <thead><tr><th>Type</th><th>Status</th><th>Started</th><th>Finished</th><th>Fetched</th><th>Saved</th><th>Error</th></tr></thead>
-          <tbody><tr v-for="j in status?.history||[]" :key="j._id"><td><v-chip size="small" variant="tonal">{{j.type}}</v-chip></td><td><v-chip size="small" :color="j.status==='success'?'success':j.status==='failed'?'error':'warning'">{{j.status}}</v-chip></td><td>{{new Date(j.startedAt).toLocaleString()}}</td><td>{{j.finishedAt?new Date(j.finishedAt).toLocaleString():'—'}}</td><td>{{j.fetched}}</td><td>{{j.upserted}}</td><td>{{j.error||'—'}}</td></tr></tbody>
-        </v-table>
-      </v-card-text>
-    </v-card>
+    <DataTable
+      title="Sync History"
+      :headers="[
+        { title: 'Type', key: 'type' },
+        { title: 'Status', key: 'status' },
+        { title: 'Started', key: 'startedAt' },
+        { title: 'Finished', key: 'finishedAt' },
+        { title: 'Fetched', key: 'fetched', align: 'end' },
+        { title: 'Saved', key: 'upserted', align: 'end' },
+        { title: 'Error', key: 'error' }
+      ]"
+      :items="status?.history || []"
+      :show-search="false"
+      empty-title="No sync jobs yet"
+    >
+      <template #item.type="{ item }"><v-chip size="small" variant="tonal">{{ item.type }}</v-chip></template>
+      <template #item.status="{ item }"><StatusChip :status="item.status" /></template>
+      <template #item.startedAt="{ item }">{{ new Date(item.startedAt).toLocaleString() }}</template>
+      <template #item.finishedAt="{ item }">{{ item.finishedAt ? new Date(item.finishedAt).toLocaleString() : '—' }}</template>
+      <template #item.error="{ item }">{{ item.error || '—' }}</template>
+    </DataTable>
   </v-col>
 </v-row>
 </template>
