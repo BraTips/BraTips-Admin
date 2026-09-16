@@ -8,6 +8,18 @@
   .logo { display:flex; align-items:center; min-height:42px; overflow:hidden; }
   .logo a { display:block; line-height:0; }
   .logo img.app-logo { height:36px; width:180px; max-width:none; display:block; object-fit:contain; object-position:left center; }
+
+  /* Give the icon a bit of breathing room from the label so nav items don't look cramped */
+  .v-list-item__prepend {
+    margin-inline-end: 16px !important;
+  }
+  .iconClass {
+    font-size: 19px;
+    display: inline-flex;
+  }
+  .v-list-item-title {
+    letter-spacing: 0.01em;
+  }
   .scrollnavbar {
     .v-list { color:#5c687b; background:transparent;
       .v-list-subheader, .smallCap { color:#9a7282 !important; }

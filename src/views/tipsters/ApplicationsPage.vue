@@ -94,56 +94,111 @@ onMounted(load);
     </template>
   </DataTable>
 
-  <v-dialog :model-value="!!selected" @update:model-value="(v: boolean) => { if (!v) selected = null }" max-width="850">
-    <v-card v-if="selected">
-      <v-card-title class="d-flex align-center">
-        Tipster Application
-        <v-spacer />
-        <StatusChip :status="selected.status" />
-      </v-card-title>
-      <v-card-text>
+  <v-dialog :model-value="!!selected" @update:model-value="(v: boolean) => { if (!v) selected = null }" max-width="880">
+    <v-card v-if="selected" class="application-dialog">
+      <div class="application-banner">
+        <v-avatar size="52" color="white" class="application-avatar">
+          <span class="text-h6 font-weight-bold" style="color: #ed275f">{{ (selected.userId?.name || selected.username || '?').charAt(0).toUpperCase() }}</span>
+        </v-avatar>
+        <div class="flex-grow-1 min-width-0">
+          <div class="text-caption text-uppercase" style="opacity: 0.75; letter-spacing: 0.08em">Tipster application</div>
+          <div class="text-h6 font-weight-bold text-truncate">{{ selected.userId?.name || selected.username }}</div>
+          <div class="text-caption" style="opacity: 0.85">@{{ selected.username }} · {{ selected.userId?.email }}</div>
+        </div>
+        <StatusChip :status="selected.status" size="default" />
+        <v-btn icon="mdi-close" variant="text" density="comfortable" color="white" @click="selected = null" />
+      </div>
+
+      <v-card-text class="pa-5">
         <v-row>
           <v-col cols="12" md="6">
-            <v-card variant="tonal">
-              <v-card-title>Applicant</v-card-title>
+            <v-card variant="outlined" class="rounded-lg" style="height: 100%">
+              <v-card-item class="pb-0">
+                <template #prepend><v-icon icon="mdi-account-circle-outline" color="primary" /></template>
+                <v-card-title class="text-subtitle-2 font-weight-bold">Applicant</v-card-title>
+              </v-card-item>
               <v-card-text>
-                <div><b>Name:</b> {{ selected.userId?.name }}</div>
-                <div><b>Email:</b> {{ selected.userId?.email }}</div>
-                <div><b>Username:</b> {{ selected.username }}</div>
-                <div><b>Country:</b> {{ selected.country || '—' }}</div>
-                <div><b>Experience:</b> {{ selected.experience || '—' }}</div>
-                <div><b>Expertise:</b> {{ selected.expertise?.join(', ') || '—' }}</div>
-                <p class="mt-3"><b>Bio:</b><br />{{ selected.bio }}</p>
+                <dl class="info-list">
+                  <div><dt>Country</dt><dd>{{ selected.country || '—' }}</dd></div>
+                  <div><dt>Experience</dt><dd>{{ selected.experience || '—' }}</dd></div>
+                  <div><dt>Expertise</dt><dd>{{ selected.expertise?.join(', ') || '—' }}</dd></div>
+                </dl>
+                <p class="text-body-2 mt-3 mb-0"><span class="font-weight-medium">Bio</span><br />{{ selected.bio }}</p>
               </v-card-text>
             </v-card>
           </v-col>
           <v-col cols="12" md="6">
-            <v-card variant="tonal">
-              <v-card-title>Sample Prediction</v-card-title>
+            <v-card variant="outlined" class="rounded-lg" style="height: 100%">
+              <v-card-item class="pb-0">
+                <template #prepend><v-icon icon="mdi-soccer" color="primary" /></template>
+                <v-card-title class="text-subtitle-2 font-weight-bold">Sample Prediction</v-card-title>
+                <template #append v-if="selected.samplePrediction?.confidence != null">
+                  <v-chip size="small" variant="tonal" color="primary">{{ selected.samplePrediction.confidence }}% confidence</v-chip>
+                </template>
+              </v-card-item>
               <v-card-text>
-                <div><b>Fixture:</b> {{ selected.samplePrediction?.fixture }}</div>
-                <div><b>League:</b> {{ selected.samplePrediction?.league || '—' }}</div>
-                <div><b>Prediction:</b> {{ selected.samplePrediction?.prediction }}</div>
-                <div><b>Odds:</b> {{ selected.samplePrediction?.odds }}</div>
-                <div><b>Confidence:</b> {{ selected.samplePrediction?.confidence ?? '—' }}%</div>
-                <p class="mt-3"><b>Analysis:</b><br />{{ selected.samplePrediction?.analysis }}</p>
+                <div class="text-subtitle-1 font-weight-bold">{{ selected.samplePrediction?.fixture }}</div>
+                <div class="text-caption text-medium-emphasis mb-2">{{ selected.samplePrediction?.league || '—' }}</div>
+                <dl class="info-list">
+                  <div><dt>Prediction</dt><dd>{{ selected.samplePrediction?.prediction }}</dd></div>
+                  <div><dt>Odds</dt><dd>{{ selected.samplePrediction?.odds }}</dd></div>
+                </dl>
+                <p class="text-body-2 mt-3 mb-0"><span class="font-weight-medium">Analysis</span><br />{{ selected.samplePrediction?.analysis }}</p>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
-        <v-textarea v-model="notes" label="Admin review notes" variant="outlined" class="mt-4" />
-        <div class="d-flex flex-wrap ga-2">
-          <v-btn color="info" :loading="reviewLoading" @click="review('under_review')">Under Review</v-btn>
-          <v-btn color="success" :loading="reviewLoading" @click="review('approve')">Approve</v-btn>
-          <v-btn color="warning" :loading="reviewLoading" @click="review('more_info')">Request More Info</v-btn>
-          <v-btn color="error" :loading="reviewLoading" @click="review('reject')">Reject</v-btn>
-          <v-btn color="error" variant="outlined" :loading="reviewLoading" @click="review('suspend')">Suspend</v-btn>
+
+        <v-textarea v-model="notes" label="Admin review notes" variant="outlined" rows="3" class="mt-4" />
+
+        <div class="d-flex flex-wrap ga-2 mt-1">
+          <v-btn color="info" variant="tonal" prepend-icon="mdi-eye-outline" :loading="reviewLoading" @click="review('under_review')">Under Review</v-btn>
+          <v-btn color="warning" variant="tonal" prepend-icon="mdi-comment-question-outline" :loading="reviewLoading" @click="review('more_info')">Request More Info</v-btn>
+          <v-spacer />
+          <v-btn color="error" variant="outlined" prepend-icon="mdi-block-helper" :loading="reviewLoading" @click="review('suspend')">Suspend</v-btn>
+          <v-btn color="error" prepend-icon="mdi-close-circle-outline" :loading="reviewLoading" @click="review('reject')">Reject</v-btn>
+          <v-btn color="success" prepend-icon="mdi-check-circle-outline" :loading="reviewLoading" @click="review('approve')">Approve</v-btn>
         </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn variant="text" @click="selected = null">Close</v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
+
+<style scoped>
+.application-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  color: #fff;
+  background: linear-gradient(120deg, #7d1235 0%, #c8174c 45%, #ed275f 85%);
+}
+.application-avatar {
+  flex-shrink: 0;
+}
+.min-width-0 {
+  min-width: 0;
+}
+.info-list {
+  margin: 0;
+}
+.info-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 13px;
+}
+.info-list > div:last-child {
+  border-bottom: none;
+}
+.info-list dt {
+  color: rgba(0, 0, 0, 0.55);
+}
+.info-list dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+</style>
