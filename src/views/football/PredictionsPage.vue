@@ -16,5 +16,17 @@ const fields = [
 </script>
 
 <template>
-  <ResourcePage title="Predictions" endpoint="predictions" :fields="fields" />
+  <!--
+    Predictions submitted by tipsters land here with status "pending" and only appear on
+    the public site once status is "published". Editing a prediction through the generic
+    dialog used to silently fail (see ResourcePage.vue fix) which meant approvals never
+    went through. The Approve/Reject buttons below patch just the status field directly,
+    so approving a tipster's pick is one click and can't hit that bug.
+  -->
+  <ResourcePage title="Predictions" endpoint="predictions" :fields="fields" status-key="status">
+    <template #row-actions="{ row, quickUpdate }">
+      <v-btn v-if="row.status === 'pending'" size="small" variant="tonal" color="success" class="mr-1" @click="quickUpdate(row, { status: 'published' })">Approve</v-btn>
+      <v-btn v-if="row.status === 'pending'" size="small" variant="tonal" color="error" class="mr-1" @click="quickUpdate(row, { status: 'void' })">Reject</v-btn>
+    </template>
+  </ResourcePage>
 </template>

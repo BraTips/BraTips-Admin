@@ -12,7 +12,7 @@ interface Field {
   optionLabelKey?: string;  // key on the related record to show, e.g. 'name' (default: 'name')
   choices?: string[];       // static options for 'select' (e.g. enum status values), used instead of optionsEndpoint
 }
-const props = defineProps<{ title: string; endpoint: string; fields: Field[]; searchKey?: string; }>();
+const props = defineProps<{ title: string; endpoint: string; fields: Field[]; searchKey?: string; statusKey?: string; }>();
 const rows = ref<any[]>([]);
 const loading = ref(false);
 const saving = ref(false);
@@ -20,14 +20,21 @@ const error = ref('');
 const dialog = ref(false);
 const editing = ref<any | null>(null);
 const search = ref('');
+const statusFilter = ref('');
 const optionsByField = ref<Record<string, SelectOption[]>>({});
 const labelByFieldAndId = ref<Record<string, Record<string, string>>>({});
 
 const form = ref<Record<string, any>>({});
+const statusChoices = computed(() => {
+  if (!props.statusKey) return [];
+  return props.fields.find(f => f.key === props.statusKey)?.choices || [];
+});
 const filtered = computed(() => {
+  let list = rows.value;
+  if (props.statusKey && statusFilter.value) list = list.filter(r => (r[props.statusKey!] ?? '') === statusFilter.value);
   const q = search.value.toLowerCase().trim();
-  if (!q) return rows.value;
-  return rows.value.filter(r => props.fields.some(f => String(displayValue(r, f)).toLowerCase().includes(q)));
+  if (!q) return list;
+  return list.filter(r => props.fields.some(f => String(displayValue(r, f)).toLowerCase().includes(q)));
 });
 
 function toDateInput(v: any) {
@@ -45,6 +52,10 @@ function displayValue(row: any, f: Field) {
     return labelByFieldAndId.value[f.key]?.[id] ?? raw ?? '—';
   }
   if (f.type === 'date') return raw ? new Date(raw).toLocaleDateString() : '—';
+  // A field can come back as a populated object (Mongo .populate()) even when it isn't
+  // declared type:'select' in this page's field config. Showing "[object Object]" is a
+  // real bug we hit on Predictions (matchId) — fall back to a readable id/label instead.
+  if (raw && typeof raw === 'object') return raw.name || raw.fixture || raw.username || raw._id || '—';
   return raw ?? '—';
 }
 
@@ -79,9 +90,14 @@ function openEdit(row: any) {
   const v: Record<string, any> = {};
   props.fields.forEach(f => {
     const raw = row[f.key];
-    if (f.type === 'select') v[f.key] = typeof raw === 'object' && raw ? raw._id : raw;
-    else if (f.type === 'date') v[f.key] = toDateInput(raw);
-    else v[f.key] = raw ?? '';
+    // A populated Mongo reference is an object with an _id, regardless of whether this
+    // field is declared type:'select'. Previously only 'select' fields were unwrapped,
+    // so a plain text field holding a populated ref (e.g. Predictions' matchId) got the
+    // raw object stuffed into the form and silently failed to save (backend expects a
+    // plain id string). Unwrap defensively for every field type.
+    const unwrapped = raw && typeof raw === 'object' && raw._id ? raw._id : raw;
+    if (f.type === 'date') v[f.key] = toDateInput(unwrapped);
+    else v[f.key] = unwrapped ?? '';
   });
   form.value = v;
   dialog.value = true;
@@ -111,6 +127,15 @@ async function remove(row: any) {
   try { await apiFetch(`/admin/${props.endpoint}/${row._id}`, { method: 'DELETE' }); await load(); }
   catch (e: any) { error.value = e.message; }
 }
+// Lets a page (e.g. Predictions) set a field's value directly — bypassing the edit
+// dialog entirely — for a one-click action like "Approve". This sends only the
+// changed field, so it can never trip over the populated-object round-trip bug above.
+async function quickUpdate(row: any, patch: Record<string, any>) {
+  error.value = '';
+  try { await apiFetch(`/admin/${props.endpoint}/${row._id}`, { method: 'PATCH', body: JSON.stringify(patch) }); await load(); }
+  catch (e: any) { error.value = e.message; }
+}
+defineExpose({ load, quickUpdate });
 onMounted(async () => { await loadFieldOptions(); await load(); });
 </script>
 
@@ -122,6 +147,12 @@ onMounted(async () => { await loadFieldOptions(); await load(); });
     </v-card-item>
     <v-card-text>
       <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" variant="outlined" clearable class="mb-4" />
+      <div v-if="statusChoices.length" class="mb-4" style="display:flex;gap:8px;flex-wrap:wrap">
+        <v-chip :color="!statusFilter?'primary':undefined" :variant="!statusFilter?'flat':'outlined'" size="small" @click="statusFilter=''">All ({{ rows.length }})</v-chip>
+        <v-chip v-for="c in statusChoices" :key="c" :color="statusFilter===c?'primary':undefined" :variant="statusFilter===c?'flat':'outlined'" size="small" @click="statusFilter=c">
+          {{ c }} ({{ rows.filter(r => (r[statusKey!] ?? '') === c).length }})
+        </v-chip>
+      </div>
       <v-alert v-if="error" type="error" variant="tonal" class="mb-4">{{ error }}</v-alert>
       <v-progress-linear v-if="loading" indeterminate />
       <v-table v-else>
@@ -130,6 +161,7 @@ onMounted(async () => { await loadFieldOptions(); await load(); });
           <tr v-for="row in filtered" :key="row._id">
             <td v-for="f in fields" :key="f.key">{{ displayValue(row, f) }}</td>
             <td class="text-right text-no-wrap">
+              <slot name="row-actions" :row="row" :quick-update="quickUpdate" />
               <v-btn size="small" variant="text" color="primary" @click="openEdit(row)">Edit</v-btn>
               <v-btn size="small" variant="text" color="error" @click="remove(row)">Delete</v-btn>
             </td>
