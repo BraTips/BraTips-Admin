@@ -10,6 +10,7 @@ const MainRoutes = {
     { name: 'Teams', path: '/teams', component: () => import('@/views/football/TeamsPage.vue') },
     { name: 'Matches', path: '/matches', component: () => import('@/views/football/MatchesPage.vue') },
     { name: 'Users', path: '/users', component: () => import('@/views/football/UsersPage.vue') },
+    { name: 'Reports', path: '/reports', component: () => import('@/views/reports/ReportsPage.vue') },
     { name: 'Tipster Applications', path: '/tipsters/applications', component: () => import('@/views/tipsters/ApplicationsPage.vue') },
     { name: 'Approved Tipsters', path: '/tipsters', component: () => import('@/views/tipsters/TipstersPage.vue') },
     { name: 'Tipster Rewards', path: '/tipsters/rewards', component: () => import('@/views/tipsters/RewardsPage.vue') },

@@ -9,6 +9,7 @@ import {
   LineChartOutlined,
   SettingOutlined,
   CloudSyncOutlined,
+  FlagOutlined,
   LogoutOutlined
 } from '@ant-design/icons-vue';
 
@@ -39,6 +40,7 @@ const sidebarItem: menu[] = [
 
   { header: 'Platform' },
   { title: 'Users', icon: UserOutlined, to: '/users' },
+  { title: 'Reports', icon: FlagOutlined, to: '/reports' },
   { title: 'Tipster Applications', icon: UserOutlined, to: '/tipsters/applications', chip: 'Review', chipColor: 'warning' },
   { title: 'Approved Tipsters', icon: TeamOutlined, to: '/tipsters' },
   { title: 'Tipster Rewards', icon: TrophyOutlined, to: '/tipsters/rewards' },

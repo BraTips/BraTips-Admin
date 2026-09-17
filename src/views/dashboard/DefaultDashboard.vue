@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { apiFetch } from '@/utils/api'
-import { DashboardOutlined, UserOutlined, TrophyOutlined, FundOutlined, ThunderboltOutlined, SyncOutlined, CreditCardOutlined, FileSearchOutlined } from '@ant-design/icons-vue'
+import { DashboardOutlined, UserOutlined, TrophyOutlined, FundOutlined, ThunderboltOutlined, SyncOutlined, CreditCardOutlined, FileSearchOutlined, FlagOutlined } from '@ant-design/icons-vue'
 import { mdiRefresh, mdiSync } from '@mdi/js'
 
 const loading = ref(true)
@@ -30,6 +30,7 @@ const cards = [
   { label: 'Active tipsters', key: 'tipsters', icon: TrophyOutlined, tone: 'pink', to: '/tipsters' },
   { label: 'Predictions', key: 'predictions', icon: FundOutlined, tone: 'purple', to: '/predictions' },
   { label: 'Pending reviews', key: 'tipsterPending', icon: FileSearchOutlined, tone: 'orange', to: '/tipsters/applications' },
+  { label: 'Open reports', key: 'openReports', icon: FlagOutlined, tone: 'orange', to: '/reports' },
   { label: 'Matches', key: 'matches', icon: DashboardOutlined, tone: 'blue', to: '/matches' },
   { label: 'Live now', key: 'live', icon: ThunderboltOutlined, tone: 'green', to: '/matches' },
   { label: 'Subscriptions', key: 'activeSubscriptions', icon: CreditCardOutlined, tone: 'pink', to: '/billing' },
@@ -46,6 +47,7 @@ const cardValue = (key:string) => key === 'subscriptionRevenue' ? `${d.value.sub
 
 const priorities = computed(() => [
   { title: 'Tipster applications', subtitle: pending.value ? `${pending.value} waiting for review` : 'No applications waiting', icon: FileSearchOutlined, to: '/tipsters/applications', tone: pending.value ? 'orange' : 'green' },
+  { title: 'Reports & tickets', subtitle: Number(d.value.openReports || 0) ? `${d.value.openReports} open${Number(d.value.urgentReports || 0) ? `, ${d.value.urgentReports} high priority` : ''}` : 'No open reports', icon: FlagOutlined, to: '/reports', tone: Number(d.value.urgentReports || 0) ? 'orange' : (Number(d.value.openReports || 0) ? 'blue' : 'green') },
   { title: 'Prediction moderation', subtitle: `${Number(d.value.predictions || 0)} total predictions`, icon: FundOutlined, to: '/predictions', tone: 'purple' },
   { title: 'Football data sync', subtitle: 'Provider, fixtures and live scores', icon: SyncOutlined, to: '/sync', tone: 'blue' },
   { title: 'Billing', subtitle: `${Number(d.value.activeSubscriptions || 0)} active subscriptions`, icon: CreditCardOutlined, to: '/billing', tone: 'pink' },
