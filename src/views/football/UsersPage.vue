@@ -19,9 +19,28 @@ const headers = [
   { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
 ];
 
+function normalizeUser(user: any) {
+  const source = user.user || user.profile || user;
+  const name =
+    source.name ||
+    source.fullName ||
+    source.full_name ||
+    [source.firstName || source.first_name, source.lastName || source.last_name].filter(Boolean).join(' ');
+
+  return {
+    ...user,
+    name: name || user.name || user.fullName || '—',
+    email: source.email || user.email || '—'
+  };
+}
+
 async function load() {
   loading.value = true;
-  try { rows.value = await apiFetch('/admin/users?limit=100'); }
+  try {
+    const response = await apiFetch('/admin/users?limit=100');
+    const users = Array.isArray(response) ? response : response.users || response.data || [];
+    rows.value = users.map(normalizeUser);
+  }
   catch (e: any) { error.value = e.message; }
   finally { loading.value = false; }
 }
