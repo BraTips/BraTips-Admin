@@ -34,6 +34,7 @@ const sidebarItem: menu[] = [
   { title: 'Predictions', icon: LineChartOutlined, to: '/predictions' },
   { title: 'Prediction History', icon: LineChartOutlined, to: '/prediction-history' },
   { title: 'Bet of the Day', icon: ThunderboltOutlined, to: '/bet-of-day' },
+  { title: 'AI Daily Accumulator', icon: ThunderboltOutlined, to: '/accumulator' },
   { title: 'Odds', icon: BarChartOutlined, to: '/odds' },
   { title: 'Trends', icon: ThunderboltOutlined, to: '/trends' },
   { title: 'xGoals', icon: LineChartOutlined, to: '/xgoals' },

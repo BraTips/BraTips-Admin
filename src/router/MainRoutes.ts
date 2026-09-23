@@ -17,6 +17,7 @@ const MainRoutes = {
     { name: 'Predictions', path: '/predictions', component: () => import('@/views/football/PredictionsPage.vue') },
     { name: 'Prediction History', path: '/prediction-history', component: () => import('@/views/football/PredictionHistoryPage.vue') },
     { name: 'Bet of the Day', path: '/bet-of-day', component: () => import('@/views/football/BetOfDayPage.vue') },
+    { name: 'AI Daily Accumulator', path: '/accumulator', component: () => import('@/views/football/AccumulatorPage.vue') },
     { name: 'Odds', path: '/odds', component: () => import('@/views/football/OddsPage.vue') },
     { name: 'Trends', path: '/trends', component: () => import('@/views/football/TrendsPage.vue') },
     { name: 'xGoals', path: '/xgoals', component: () => import('@/views/football/XGoalsPage.vue') },
