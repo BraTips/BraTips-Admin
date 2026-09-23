@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vuetify from 'vite-plugin-vuetify';
-import fs from 'fs';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
 
 // https://vitejs.dev/config/
@@ -22,13 +22,15 @@ export default defineConfig(({ command }) => {
         autoImport: true,
       }),
       isBuild
-        ? {
-            name: 'copy-index-to-404',
-            closeBundle() {
-              const outputDir = path.resolve(__dirname, 'dist');
-              fs.copyFileSync(path.join(outputDir, 'index.html'), path.join(outputDir, '404.html'));
-            },
-          }
+        ? viteStaticCopy({
+            targets: [
+              {
+                src: path.resolve(__dirname, 'dist/index.html'),
+                dest: '.',
+                rename: '404.html',
+              },
+            ],
+          })
         : null,
     ].filter(Boolean),
 
